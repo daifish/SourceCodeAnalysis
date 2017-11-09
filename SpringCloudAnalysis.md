@@ -73,12 +73,13 @@
         
         public class BaseLoadBalancer {
             allServerList;
-            upServerList
-            IPing//检查服务实例是否正常
-            IPingStrategy//默认采用线性遍历ping服务实例的方式实现检查服务实例
+            upServerList;
+            IPing; //检查服务实例是否正常
+            IPingStrategy; //默认采用线性遍历ping服务实例的方式实现检查服务实例
         }
-  #### 熔断策略:HystrixCommand / HystrixObservableCommand 基于命令模式进行开发
-  ##### HystrixCommand命令执行方式: execute()-> 同步执行 queue()->异步执行 返回Future对象
-  ##### HystrixObservableCommand命令执行方式：observe()->返回Observable对象 toObservable()->返回Observable对象,返回的是Cold Observable
-  ##### 观察者-订阅者模式：Observable向订阅者Subscriber发布事件，接收后并进行处理，Observable对象可以发出多个事件，当发出事件后，会调用Subscriber的onNext()方法。
+        
+#### 熔断策略:HystrixCommand / HystrixObservableCommand 基于命令模式进行开发
+##### HystrixCommand命令执行方式: execute()-> 同步执行 queue()->异步执行 返回Future对象
+##### HystrixObservableCommand命令执行方式：observe()->返回Observable对象 toObservable()->返回Observable对象,返回的是Cold Observable
+##### 观察者-订阅者模式：Observable向订阅者Subscriber发布事件，接收后并进行处理，Observable对象可以发出多个事件，当发出事件后，会调用Subscriber的onNext()方法。
         

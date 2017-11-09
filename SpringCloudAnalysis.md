@@ -63,5 +63,22 @@
         reconstructURI();//利用instanceInfo 和 使用逻辑名的URI 拼出host:port的具体形式
       }
  ##### LoadBanlancerAutoConfiguration是客户端负载均衡的自动配置类，定义了LoadBalancerInterceptor，拦截客户端请求，RestTemplateCustomizer对RestTemaplate请求添加拦截
-    
-    
+ ##### Ribbon通过在拦截器里注入了LoadBalancerClient的实现，当被@LoadBalanced修饰的RestTemplate发出HTTP请求后，会被拦截器拦截，并通过获取服务名，调用execute函数执行实际的请求
+ ##### 这里选择具体服务实例的过程中使用了ILoadBalancer接口定义的chooseServer函数，默认的实现是ZoneAwareLoadBalancer，将一个以服务名为host的URI请求到host:port形式的实际访问地址的转换
+ ##### 思路：通过LoadBalancerInterceptor对请求进行拦截，利用负载均衡器LoadBalancerClient完成逻辑服务名为host的URI转换为具体的服务实例的过程,采用ZoneAwareLoadBalancer的实例实现客户端负载均衡
+ ##### 负载均衡器的实现：利用Ribbon的ILoadBalancer接口实现
+        public abstract class AbstractLoadBalancer {
+            public enum ServerGroup{ALL, STATUS_UP, STATUS_NOT_UP}
+        }
+        
+        public class BaseLoadBalancer {
+            allServerList;
+            upServerList
+            IPing//检查服务实例是否正常
+            IPingStrategy//默认采用线性遍历ping服务实例的方式实现检查服务实例
+        }
+  #### 熔断策略:HystrixCommand / HystrixObservableCommand 基于命令模式进行开发
+  ##### HystrixCommand命令执行方式: execute()-> 同步执行 queue()->异步执行 返回Future对象
+  ##### HystrixObservableCommand命令执行方式：observe()->返回Observable对象 toObservable()->返回Observable对象,返回的是Cold Observable
+  ##### 观察者-订阅者模式：Observable向订阅者Subscriber发布事件，接收后并进行处理，Observable对象可以发出多个事件，当发出事件后，会调用Subscriber的onNext()方法。
+        
